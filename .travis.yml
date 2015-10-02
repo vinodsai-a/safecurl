@@ -15,13 +15,6 @@ cache:
         - vendor
         - $HOME/.composer/cache
 
-# run build against 7.0 & hhvm but allow them to fail
-matrix:
-    fast_finish: true
-    allow_failures:
-        - php: 7.0
-        - php: hhvm
-
 # faster builds on new travis setup not using sudo
 sudo: false
 
