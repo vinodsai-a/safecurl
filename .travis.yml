@@ -9,6 +9,12 @@ php:
     - 7.0
     - hhvm
 
+# cache vendor dirs
+cache:
+    directories:
+        - vendor
+        - $HOME/.composer/cache
+
 # run build against 7.0 & hhvm but allow them to fail
 matrix:
     fast_finish: true
