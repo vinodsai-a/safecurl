@@ -32,7 +32,7 @@ composer update
 
 ## Usage
 
-It's as easy as replacing `curl_exec` with `SafeCurl::execute`, and wrapping it in a `try {} catch {}` block.
+It's as easy as replacing `curl_exec` and wrapping it in a `try {} catch {}` block.
 
 ```php
 use fin1te\SafeCurl\SafeCurl;
@@ -47,7 +47,8 @@ try {
     curl_setopt($curlHandle, CURLOPT_USERAGENT, 'Mozilla/5.0 (SafeCurl)');
 
     //Execute using SafeCurl
-    $response = SafeCurl::execute($url, $curlHandle);
+    $safeCurl = new SafeCurl($curlHandle);
+    $response = $safeCurl->execute($url);
 } catch (Exception $e) {
     //URL wasn't safe
 }
@@ -61,6 +62,7 @@ If you wish to add your own options (such as to blacklist any requests to domain
 Domains are express using regex syntax, whilst IPs, scheme and ports are standard strings (IPs can be specified in [CIDR notation](https://en.wikipedia.org/wiki/Cidr)).
 
 ```php
+use fin1te\SafeCurl\SafeCurl;
 use fin1te\SafeCurl\Options;
 
 $options = new Options();
@@ -70,10 +72,12 @@ $options->addToList('whitelist', 'scheme', 'ftp');
 $curlHandle = curl_init();
 
 //This will now throw an InvalidDomainException
-$response = SafeCurl::execute('http://safecurl.fin1te.net', $curlHandle, $options);
+$safeCurl = new SafeCurl($curlHandle, $options);
+$response = $safeCurl->execute('http://safecurl.fin1te.net');
 
 //Whilst this will be allowed, and return the response
-$response = SafeCurl::execute('ftp://fin1te.net', $curlHandle, $options);
+$safeCurl = new SafeCurl($curlHandle, $options);
+$response = $safeCurl->execute('ftp://fin1te.net');
 ```
 
 Since we can't get access to any already set cURL options (see Caveats section), to enable `CURL_FOLLOWREDIRECTS` you must call the `enableFollowRedirects()` method. If you wish to specify a redirect limit, you will need to call `setMaxRedirects()`. Passing in `0` will allow infinite redirects.
@@ -92,6 +96,7 @@ The URL checking methods are also public, meaning that you can validate a URL be
 
 ```php
 use fin1te\SafeCurl\Url;
+use fin1te\SafeCurl\Exception;
 
 try {
     $url = 'http://www.google.com';
@@ -117,13 +122,18 @@ $options->enablePinDns();
 The second disables the use of credentials in a URL, since PHP's `parse_url` returns values which differ from ones cURL uses. This is a temporary fix.
 
 ```php
+use fin1te\SafeCurl\SafeCurl;
+use fin1te\SafeCurl\Exception;
+use fin1te\SafeCurl\Options;
+
 $options = new Options();
 $options->disableSendCredentials();
 
 $curlHandle = curl_init();
 
 //This will throw an InvalidURLException
-$response = SafeCurl::execute('http://user:pass@google.com', $curlHandle, $options);
+$safeCurl = new SafeCurl($curlHandle, $options);
+$response = $safeCurl->execute('http://user:pass@google.com');
 ```
 
 #### Cavets

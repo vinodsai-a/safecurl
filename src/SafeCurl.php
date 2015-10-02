@@ -105,60 +105,47 @@ class SafeCurl
      * URL abides by our whitelists/blacklists.
      *
      * @param $url        string
-     * @param $curlHandle resource         optional - Incase called on an object rather than statically
-     * @param $options    SafeCurl\Options optional
      *
      * @return bool
      */
-    public static function execute($url, $curlHandle = null, Options $options = null)
+    public function execute($url)
     {
-        //Check if we've been called staticly or not
-        if (isset($this) && get_class($this) == __CLASS__) {
-            $safeCurl = $this;
-            //Get the cURL handle, if it wasn't passed in
-            if (!is_resource($curlHandle) || get_resource_type($curlHandle) != 'curl') {
-                $curlHandle = $this->getCurlHandle();
-            }
-        } else {
-            $safeCurl = new self($curlHandle, $options);
-        }
-
         //Backup the existing URL
         $originalUrl = $url;
 
         //Execute, catch redirects and validate the URL
         $redirected = false;
         $redirectCount = 0;
-        $redirectLimit = $safeCurl->getOptions()->getFollowLocationLimit();
-        $followLocation = $safeCurl->getOptions()->getFollowLocation();
+        $redirectLimit = $this->getOptions()->getFollowLocationLimit();
 
         do {
             //Validate the URL
-            $url = Url::validateUrl($url, $safeCurl->getOptions());
+            $url = Url::validateUrl($url, $this->getOptions());
 
-            if ($safeCurl->getOptions()->getPinDns()) {
+            if ($this->getOptions()->getPinDns()) {
                 //Send a Host header
-                curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array('Host: '.$url['host']));
+                curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, array('Host: '.$url['host']));
                 //The "fake" URL
-                curl_setopt($curlHandle, CURLOPT_URL, $url['url']);
+                curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
                 //We also have to disable SSL cert verfication, which is not great
                 //Might be possible to manually check the certificate ourselves?
-                curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($this->curlHandle, CURLOPT_SSL_VERIFYPEER, false);
             } else {
-                curl_setopt($curlHandle, CURLOPT_URL, $url['url']);
+                curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
             }
 
             //Execute the cURL request
-            $response = curl_exec($curlHandle);
+            $response = curl_exec($this->curlHandle);
 
             //Check for any errors
-            if (curl_errno($curlHandle)) {
-                throw new Exception('cURL Error: '.curl_error($curlHandle));
+            if (curl_errno($this->curlHandle)) {
+                throw new Exception('cURL Error: '.curl_error($this->curlHandle));
             }
 
             //Check for an HTTP redirect
-            if ($followLocation) {
-                $statusCode = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
+            if ($this->getOptions()->getFollowLocation()) {
+                $statusCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+
                 switch ($statusCode) {
                     case 301:
                     case 302:
@@ -167,10 +154,10 @@ class SafeCurl
                     case 308:
                         if ($redirectLimit == 0 || ++$redirectCount < $redirectLimit) {
                             //Redirect received, so rinse and repeat
-                            $url = curl_getinfo($curlHandle, CURLINFO_REDIRECT_URL);
+                            $url = curl_getinfo($this->curlHandle, CURLINFO_REDIRECT_URL);
                             $redirected = true;
                         } else {
-                            throw new Exception("Redirect limit '$redirectLimit' hit");
+                            throw new Exception('Redirect limit "'.$redirectLimit.'" hit');
                         }
                         break;
                     default:
