@@ -118,53 +118,39 @@ class SafeCurl
         $redirectCount = 0;
         $redirectLimit = $this->getOptions()->getFollowLocationLimit();
 
-        do {
-            //Validate the URL
-            $url = Url::validateUrl($url, $this->getOptions());
+        //Validate the URL
+        $url = Url::validateUrl($url, $this->getOptions());
 
-            if ($this->getOptions()->getPinDns()) {
-                //Send a Host header
-                curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, array('Host: '.$url['host']));
-                //The "fake" URL
-                curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
-                //We also have to disable SSL cert verfication, which is not great
-                //Might be possible to manually check the certificate ourselves?
-                curl_setopt($this->curlHandle, CURLOPT_SSL_VERIFYPEER, false);
-            } else {
-                curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
-            }
+        if ($this->getOptions()->getPinDns()) {
+            //Send a Host header
+            curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, array('Host: '.$url['host']));
+            //The "fake" URL
+            curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
+            //We also have to disable SSL cert verfication, which is not great
+            //Might be possible to manually check the certificate ourselves?
+            curl_setopt($this->curlHandle, CURLOPT_SSL_VERIFYPEER, false);
+        } else {
+            curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
+        }
 
-            //Execute the cURL request
-            $response = curl_exec($this->curlHandle);
+        if ($this->getOptions()->getFollowLocation()) {
+            curl_setopt($this->curlHandle, CURLOPT_FOLLOWLOCATION, 1);
+        }
 
-            //Check for any errors
-            if (curl_errno($this->curlHandle)) {
-                throw new Exception('cURL Error: '.curl_error($this->curlHandle));
-            }
+        //Execute the cURL request
+        $response = curl_exec($this->curlHandle);
 
-            //Check for an HTTP redirect
-            if ($this->getOptions()->getFollowLocation()) {
-                $statusCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+        //Check for any errors
+        if (curl_errno($this->curlHandle)) {
+            throw new Exception('cURL Error: '.curl_error($this->curlHandle));
+        }
 
-                switch ($statusCode) {
-                    case 301:
-                    case 302:
-                    case 303:
-                    case 307:
-                    case 308:
-                        if ($redirectLimit == 0 || ++$redirectCount < $redirectLimit) {
-                            //Redirect received, so rinse and repeat
-                            $url = curl_getinfo($this->curlHandle, CURLINFO_REDIRECT_URL);
-                            $redirected = true;
-                        } else {
-                            throw new Exception('Redirect limit "'.$redirectLimit.'" hit');
-                        }
-                        break;
-                    default:
-                        $redirected = false;
-                }
-            }
-        } while ($redirected);
+        // validate number of redirect
+        // a previous solution was to use `CURLINFO_REDIRECT_URL` without `CURLOPT_FOLLOWLOCATION` and a do/while
+        // but `CURLINFO_REDIRECT_URL` was introduced in 5.3.7 & it doesn't exist in HHVM
+        if ($this->getOptions()->getFollowLocation() && $redirectLimit !== 0 && (curl_getinfo($this->curlHandle, CURLINFO_REDIRECT_COUNT)) >= $redirectLimit) {
+            throw new Exception('Redirect limit "'.$redirectLimit.'" hit');
+        }
 
         return $response;
     }

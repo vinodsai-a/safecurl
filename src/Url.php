@@ -70,7 +70,7 @@ class Url
         return array(
             'url' => $url,
             'host' => $host['host'],
-            'ips' => $host['ips']
+            'ips' => $host['ips'],
         );
     }
 
