@@ -1,5 +1,9 @@
 # SafeCurl
 
+[![Build Status](https://travis-ci.org/j0k3r/safecurl.svg?branch=master)](https://travis-ci.org/j0k3r/safecurl)
+[![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/safecurl/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/j0k3r/safecurl/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/safecurl/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/j0k3r/safecurl/?branch=master)
+
 SafeCurl intends to be a drop-in replacement for the [curl_exec](http://php.net/manual/en/function.curl-exec.php) function in PHP. SafeCurl validates each part of the URL against a white or black list, to help protect against Server-Side Request Forgery attacks.
 
 For more infomation about the project see the blog post ['SafeCurl: SSRF Protection, and a "Capture the Bitcoins"'](http://blog.fin1te.net/post/86235998757/safecurl-ssrf-protection-and-a-capture-the-bitcoins).
@@ -38,8 +42,9 @@ try {
     $url = 'http://www.google.com';
 
     $curlHandle = curl_init();
+
     //Your usual cURL options
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (SafeCurl)');
+    curl_setopt($curlHandle, CURLOPT_USERAGENT, 'Mozilla/5.0 (SafeCurl)');
 
     //Execute using SafeCurl
     $response = SafeCurl::execute($url, $curlHandle);
@@ -62,6 +67,8 @@ $options = new Options();
 $options->addToList('blacklist', 'domain', '(.*)\.fin1te\.net');
 $options->addToList('whitelist', 'scheme', 'ftp');
 
+$curlHandle = curl_init();
+
 //This will now throw an InvalidDomainException
 $response = SafeCurl::execute('http://safecurl.fin1te.net', $curlHandle, $options);
 
@@ -74,6 +81,7 @@ Since we can't get access to any already set cURL options (see Caveats section),
 ```php
 $options = new Options();
 $options->enableFollowLocation();
+
 //Abort after 10 redirects
 $options->setFollowLocationLimit(10);
 ```
@@ -95,7 +103,6 @@ try {
 }
 ```
 
-
 #### Optional Protections
 
 In addition to the standard checks, two more are available.
@@ -113,6 +120,8 @@ The second disables the use of credentials in a URL, since PHP's `parse_url` ret
 $options = new Options();
 $options->disableSendCredentials();
 
+$curlHandle = curl_init();
+
 //This will throw an InvalidURLException
 $response = SafeCurl::execute('http://user:pass@google.com', $curlHandle, $options);
 ```
@@ -128,6 +137,6 @@ A live demo is available at [http://safecurl.fin1te.net/#demo](http://safecurl.f
 
 ## Bounty
 
-In order to help make SafeCurl secure and ready for production use, [a Bitcoin bounty](http://safecurl.fin1te.net/#bounty) has been setup. 
+In order to help make SafeCurl secure and ready for production use, [a Bitcoin bounty](http://safecurl.fin1te.net/#bounty) has been setup.
 
 Inside the document root is a [Bitcoin wallet](http://safecurl.fin1te.net/btc.txt), which is only accessible by 127.0.0.1. If you can bypass the protections and grab the file, you're free to take the Bitcoins.
