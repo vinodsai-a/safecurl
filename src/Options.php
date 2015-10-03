@@ -62,9 +62,6 @@ class Options
        'scheme' => array(),
     );
 
-    /**
-     * @return fin1te\SafeCurl\Options
-     */
     public function __construct()
     {
     }
@@ -82,7 +79,7 @@ class Options
     /**
      * Enables following redirects.
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function enableFollowLocation()
     {
@@ -94,7 +91,7 @@ class Options
     /**
      * Disables following redirects.
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function disableFollowLocation()
     {
@@ -120,7 +117,7 @@ class Options
      *
      * @param $limit int
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function setFollowLocationLimit($limit)
     {
@@ -128,7 +125,7 @@ class Options
             throw new InvalidOptionException('Provided limit "'.$limit.'" must be an integer >= 0');
         }
 
-        $this->followLocationLimit = $limit;
+        $this->followLocationLimit = (int) $limit;
 
         return $this;
     }
@@ -147,7 +144,7 @@ class Options
      * Enable sending of credenitals
      * This is potentially a security risk.
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function enableSendCredentials()
     {
@@ -159,7 +156,7 @@ class Options
     /**
      * Disable sending of credentials.
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function disableSendCredentials()
     {
@@ -181,7 +178,7 @@ class Options
     /**
      * Enable DNS pinning.
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function enablePinDns()
     {
@@ -193,7 +190,7 @@ class Options
     /**
      * Disable DNS pinning.
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function disablePinDns()
     {
@@ -277,7 +274,7 @@ class Options
      * @param $values array
      * @param $type   string optional
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function setList($list, $values, $type = null)
     {
@@ -317,7 +314,7 @@ class Options
      * @param $type   string
      * @param $values array|string
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function addToList($list, $type, $values)
     {
@@ -354,7 +351,7 @@ class Options
      * @param $type   string
      * @param $values array|string
      *
-     * @return fin1te\SafeCurl\Options
+     * @return Options
      */
     public function removeFromList($list, $type, $values)
     {

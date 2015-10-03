@@ -14,7 +14,7 @@ class SafeCurl
     /**
      * SafeCurl Options.
      *
-     * @var SafeCurl\Options
+     * @var Options
      */
     private $options;
 
@@ -22,7 +22,7 @@ class SafeCurl
      * Returns new instance of SafeCurl\SafeCurl.
      *
      * @param $curlHandle resource         A valid cURL handle
-     * @param $options    SafeCurl\Options optional
+     * @param $options    Options optional
      */
     public function __construct($curlHandle, Options $options = null)
     {
@@ -64,7 +64,7 @@ class SafeCurl
     /**
      * Gets Options.
      *
-     * @return SafeCurl\Options
+     * @return Options
      */
     public function getOptions()
     {
@@ -74,7 +74,7 @@ class SafeCurl
     /**
      * Sets Options.
      *
-     * @param $options SafeCurl\Options
+     * @param $options Options
      */
     public function setOptions(Options $options)
     {
@@ -110,9 +110,6 @@ class SafeCurl
      */
     public function execute($url)
     {
-        //Backup the existing URL
-        $originalUrl = $url;
-
         $redirected = false;
         $redirectCount = 0;
         $redirectLimit = $this->getOptions()->getFollowLocationLimit();

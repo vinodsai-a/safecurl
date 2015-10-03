@@ -14,7 +14,7 @@ class Url
      * Validates the whole URL.
      *
      * @param $url     string
-     * @param $options fin1te\SafeCurl\Options
+     * @param $options Options
      *
      * @return string
      */
@@ -78,7 +78,7 @@ class Url
      * Validates a URL scheme.
      *
      * @param $scheme  string
-     * @param $options fin1te\SafeCurl\Options
+     * @param $options Options
      *
      * @return string
      */
@@ -101,7 +101,7 @@ class Url
      * Validates a port.
      *
      * @param $port    int
-     * @param $options fin1te\SafeCurl\Options
+     * @param $options Options
      *
      * @return int
      */
@@ -123,7 +123,7 @@ class Url
      * Validates a URL host.
      *
      * @param $host    string
-     * @param $options fin1te\SafeCurl\Options
+     * @param $options Options
      *
      * @returns string
      */
