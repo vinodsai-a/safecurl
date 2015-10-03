@@ -286,7 +286,7 @@ class Options
         }
 
         if (!is_array($values)) {
-            throw new InvalidOptionException('Provided values must be an array');
+            throw new InvalidOptionException('Provided values must be an array, "'.gettype($values).'" given');
         }
 
         if ($type !== null) {
