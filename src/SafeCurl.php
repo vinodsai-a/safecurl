@@ -113,44 +113,67 @@ class SafeCurl
         //Backup the existing URL
         $originalUrl = $url;
 
-        //Execute, catch redirects and validate the URL
         $redirected = false;
         $redirectCount = 0;
         $redirectLimit = $this->getOptions()->getFollowLocationLimit();
 
-        //Validate the URL
-        $url = Url::validateUrl($url, $this->getOptions());
+        do {
+            //Validate the URL
+            $url = Url::validateUrl($url, $this->getOptions());
 
-        if ($this->getOptions()->getPinDns()) {
-            //Send a Host header
-            curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, array('Host: '.$url['host']));
-            //The "fake" URL
-            curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
-            //We also have to disable SSL cert verfication, which is not great
-            //Might be possible to manually check the certificate ourselves?
-            curl_setopt($this->curlHandle, CURLOPT_SSL_VERIFYPEER, false);
-        } else {
-            curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
-        }
+            if ($this->getOptions()->getPinDns()) {
+                //Send a Host header
+                curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, array('Host: '.$url['host']));
+                //The "fake" URL
+                curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
+                //We also have to disable SSL cert verfication, which is not great
+                //Might be possible to manually check the certificate ourselves?
+                curl_setopt($this->curlHandle, CURLOPT_SSL_VERIFYPEER, false);
+            } else {
+                curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
+            }
 
-        if ($this->getOptions()->getFollowLocation()) {
-            curl_setopt($this->curlHandle, CURLOPT_FOLLOWLOCATION, 1);
-        }
+            // in case of `CURLINFO_REDIRECT_URL` isn't defined
+            curl_setopt($this->curlHandle, CURLOPT_HEADER, true);
 
-        //Execute the cURL request
-        $response = curl_exec($this->curlHandle);
+            //Execute the cURL request
+            $response = curl_exec($this->curlHandle);
 
-        //Check for any errors
-        if (curl_errno($this->curlHandle)) {
-            throw new Exception('cURL Error: '.curl_error($this->curlHandle));
-        }
+            //Check for any errors
+            if (curl_errno($this->curlHandle)) {
+                throw new Exception('cURL Error: '.curl_error($this->curlHandle));
+            }
 
-        // validate number of redirect
-        // a previous solution was to use `CURLINFO_REDIRECT_URL` without `CURLOPT_FOLLOWLOCATION` and a do/while
-        // but `CURLINFO_REDIRECT_URL` was introduced in 5.3.7 & it doesn't exist in HHVM
-        if ($this->getOptions()->getFollowLocation() && $redirectLimit !== 0 && (curl_getinfo($this->curlHandle, CURLINFO_REDIRECT_COUNT)) >= $redirectLimit) {
-            throw new Exception('Redirect limit "'.$redirectLimit.'" hit');
-        }
+            //Check for an HTTP redirect
+            if ($this->getOptions()->getFollowLocation()) {
+                $statusCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+                switch ($statusCode) {
+                    case 301:
+                    case 302:
+                    case 303:
+                    case 307:
+                    case 308:
+                        //Redirect received, so rinse and repeat
+                        if ($redirectLimit == 0 || ++$redirectCount < $redirectLimit) {
+                            // `CURLINFO_REDIRECT_URL` was introduced in 5.3.7 & it doesn't exist in HHVM
+                            // use a custom solution is that both case
+                            if (defined('CURLINFO_REDIRECT_URL')) {
+                                $url = curl_getinfo($this->curlHandle, CURLINFO_REDIRECT_URL);
+                            } else {
+                                preg_match('/Location:(.*?)\n/i', $response, $matches);
+                                $url = trim(array_pop($matches));
+                            }
+
+                            $redirected = true;
+                        } else {
+                            throw new Exception('Redirect limit "'.$redirectLimit.'" hit');
+                        }
+                        break;
+                    default:
+                        $redirected = false;
+                }
+            }
+        } while ($redirected);
 
         return $response;
     }
