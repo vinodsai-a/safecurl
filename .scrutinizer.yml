@@ -4,5 +4,6 @@ tools:
 
 filter:
     excluded_paths:
+        - 'example/*'
         - 'tests/*'
         - '*Test.php'
