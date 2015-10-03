@@ -34,7 +34,7 @@ class Options
         'port' => array('80', '443', '8080'),
         'domain' => array(),
         'scheme' => array('http', 'https'),
-   );
+    );
 
     /**
      * @var array
@@ -57,9 +57,9 @@ class Options
             '224.0.0.0/4',
             '240.0.0.0/4',
         ),
-       'port' => array(),
-       'domain' => array(),
-       'scheme' => array(),
+        'port' => array(),
+        'domain' => array(),
+        'scheme' => array(),
     );
 
     public function __construct()
