@@ -84,6 +84,8 @@ class Url
      */
     public static function validateScheme($scheme, Options $options)
     {
+        $scheme = strtolower($scheme);
+
         //Whitelist always takes precedence over a blacklist
         if (!$options->isInList('whitelist', 'scheme', $scheme)) {
             throw new InvalidSchemeException('Provided scheme "'.$scheme.'" doesn\'t match whitelisted values: '.implode(', ', $options->getList('whitelist', 'scheme')));
@@ -129,6 +131,8 @@ class Url
      */
     public static function validateHost($host, Options $options)
     {
+        $host = strtolower($host);
+
         //Check the host against the domain lists
         if (!$options->isInList('whitelist', 'domain', $host)) {
             throw new InvalidDomainException('Provided host "'.$host.'" doesn\'t match whitelisted values: '.implode(', ', $options->getList('whitelist', 'domain')));

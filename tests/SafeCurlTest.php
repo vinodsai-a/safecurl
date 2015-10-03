@@ -36,6 +36,7 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
             array('telnet://localhost:25', 'fin1te\SafeCurl\Exception\InvalidURLException\InvalidSchemeException', 'Provided scheme "telnet" doesn\'t match whitelisted values: http, https'),
             array('http://169.254.169.254/latest/meta-data/', 'fin1te\SafeCurl\Exception\InvalidURLException\InvalidIPException', 'Provided host "169.254.169.254" resolves to "169.254.169.254", which matches a blacklisted value: 169.254.0.0/16'),
             array('ftp://myhost.com', 'fin1te\SafeCurl\Exception\InvalidURLException\InvalidSchemeException', 'Provided scheme "ftp" doesn\'t match whitelisted values: http, https'),
+            array('http://user:pass@safecurl.fin1te.net?@google.com/', 'fin1te\SafeCurl\Exception\InvalidURLException', 'Credentials passed in but "sendCredentials" is set to false'),
         );
     }
 
