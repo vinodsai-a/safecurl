@@ -19,9 +19,9 @@ If you chose to enable "FOLLOWLOCATION", then any redirects are caught, and re-v
 SafeCurl can be included in any PHP project using [Composer](https://getcomposer.org). Include the following in your `composer.json` file under `require`.
 
 ```
-    "require": {
-        "fin1te\safecurl": "~1"
-    }
+"require": {
+    "fin1te\safecurl": "~1"
+}
 ```
 
 Then update Composer.
@@ -137,16 +137,6 @@ $response = $safeCurl->execute('http://user:pass@google.com');
 ```
 
 #### Cavets
-Since SafeCurl uses `getaddrbyhostl` to resolve domain names, which isn't IPv6 compatible, the class will only work with IPv4 at the moment. See [Issue #1](https://github.com/fin1te/safecurl/issues/1).
+Since SafeCurl uses `gethostbynamel` to resolve domain names, which isn't IPv6 compatible, the class will only work with IPv4 at the moment. See [Issue #1](https://github.com/fin1te/safecurl/issues/1).
 
 As mentioned above, we can't fetch the value of any cURL options set against the provided cURL handle. Because SafeCurl handles redirects itself, it will turn off `CURLOPT_FOLLOWLOCATION` and use the value from the `Options` object. This is also true of `CURLOPT_MAXREDIRECTS`.
-
-## Demo
-
-A live demo is available at [http://safecurl.fin1te.net/#demo](http://safecurl.fin1te.net/#demo). For the site source code (if you're curious), it's hosted at [fin1te/safecurl.fin1te.net](https://github.com/fin1te/safecurl.fin1te.net).
-
-## Bounty
-
-In order to help make SafeCurl secure and ready for production use, [a Bitcoin bounty](http://safecurl.fin1te.net/#bounty) has been setup.
-
-Inside the document root is a [Bitcoin wallet](http://safecurl.fin1te.net/btc.txt), which is only accessible by 127.0.0.1. If you can bypass the protections and grab the file, you're free to take the Bitcoins.
