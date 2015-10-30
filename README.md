@@ -1,5 +1,9 @@
 # SafeCurl
 
+[![Build Status](https://travis-ci.org/j0k3r/safecurl.svg?branch=master)](https://travis-ci.org/j0k3r/safecurl)
+[![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/safecurl/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/j0k3r/safecurl/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/safecurl/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/j0k3r/safecurl/?branch=master)
+
 SafeCurl intends to be a drop-in replacement for the [curl_exec](http://php.net/manual/en/function.curl-exec.php) function in PHP. SafeCurl validates each part of the URL against a white or black list, to help protect against Server-Side Request Forgery attacks.
 
 For more infomation about the project see the blog post ['SafeCurl: SSRF Protection, and a "Capture the Bitcoins"'](http://blog.fin1te.net/post/86235998757/safecurl-ssrf-protection-and-a-capture-the-bitcoins).
@@ -15,9 +19,9 @@ If you chose to enable "FOLLOWLOCATION", then any redirects are caught, and re-v
 SafeCurl can be included in any PHP project using [Composer](https://getcomposer.org). Include the following in your `composer.json` file under `require`.
 
 ```
-    "require": {
-        "fin1te\safecurl": "~1"
-    }
+"require": {
+    "fin1te\safecurl": "~1"
+}
 ```
 
 Then update Composer.
@@ -28,7 +32,7 @@ composer update
 
 ## Usage
 
-It's as easy as replacing `curl_exec` with `SafeCurl::execute`, and wrapping it in a `try {} catch {}` block.
+It's as easy as replacing `curl_exec` and wrapping it in a `try {} catch {}` block.
 
 ```php
 use fin1te\SafeCurl\SafeCurl;
@@ -38,11 +42,13 @@ try {
     $url = 'http://www.google.com';
 
     $curlHandle = curl_init();
+
     //Your usual cURL options
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (SafeCurl)');
+    curl_setopt($curlHandle, CURLOPT_USERAGENT, 'Mozilla/5.0 (SafeCurl)');
 
     //Execute using SafeCurl
-    $response = SafeCurl::execute($url, $curlHandle);
+    $safeCurl = new SafeCurl($curlHandle);
+    $response = $safeCurl->execute($url);
 } catch (Exception $e) {
     //URL wasn't safe
 }
@@ -56,17 +62,22 @@ If you wish to add your own options (such as to blacklist any requests to domain
 Domains are express using regex syntax, whilst IPs, scheme and ports are standard strings (IPs can be specified in [CIDR notation](https://en.wikipedia.org/wiki/Cidr)).
 
 ```php
+use fin1te\SafeCurl\SafeCurl;
 use fin1te\SafeCurl\Options;
 
 $options = new Options();
 $options->addToList('blacklist', 'domain', '(.*)\.fin1te\.net');
 $options->addToList('whitelist', 'scheme', 'ftp');
 
+$curlHandle = curl_init();
+
 //This will now throw an InvalidDomainException
-$response = SafeCurl::execute('http://safecurl.fin1te.net', $curlHandle, $options);
+$safeCurl = new SafeCurl($curlHandle, $options);
+$response = $safeCurl->execute('http://safecurl.fin1te.net');
 
 //Whilst this will be allowed, and return the response
-$response = SafeCurl::execute('ftp://fin1te.net', $curlHandle, $options);
+$safeCurl = new SafeCurl($curlHandle, $options);
+$response = $safeCurl->execute('ftp://fin1te.net');
 ```
 
 Since we can't get access to any already set cURL options (see Caveats section), to enable `CURL_FOLLOWREDIRECTS` you must call the `enableFollowRedirects()` method. If you wish to specify a redirect limit, you will need to call `setMaxRedirects()`. Passing in `0` will allow infinite redirects.
@@ -74,6 +85,7 @@ Since we can't get access to any already set cURL options (see Caveats section),
 ```php
 $options = new Options();
 $options->enableFollowLocation();
+
 //Abort after 10 redirects
 $options->setFollowLocationLimit(10);
 ```
@@ -84,6 +96,7 @@ The URL checking methods are also public, meaning that you can validate a URL be
 
 ```php
 use fin1te\SafeCurl\Url;
+use fin1te\SafeCurl\Exception;
 
 try {
     $url = 'http://www.google.com';
@@ -94,7 +107,6 @@ try {
     // URL wasn't safe
 }
 ```
-
 
 #### Optional Protections
 
@@ -110,24 +122,21 @@ $options->enablePinDns();
 The second disables the use of credentials in a URL, since PHP's `parse_url` returns values which differ from ones cURL uses. This is a temporary fix.
 
 ```php
+use fin1te\SafeCurl\SafeCurl;
+use fin1te\SafeCurl\Exception;
+use fin1te\SafeCurl\Options;
+
 $options = new Options();
 $options->disableSendCredentials();
 
+$curlHandle = curl_init();
+
 //This will throw an InvalidURLException
-$response = SafeCurl::execute('http://user:pass@google.com', $curlHandle, $options);
+$safeCurl = new SafeCurl($curlHandle, $options);
+$response = $safeCurl->execute('http://user:pass@google.com');
 ```
 
 #### Cavets
-Since SafeCurl uses `getaddrbyhostl` to resolve domain names, which isn't IPv6 compatible, the class will only work with IPv4 at the moment. See [Issue #1](https://github.com/fin1te/safecurl/issues/1).
+Since SafeCurl uses `gethostbynamel` to resolve domain names, which isn't IPv6 compatible, the class will only work with IPv4 at the moment. See [Issue #1](https://github.com/fin1te/safecurl/issues/1).
 
 As mentioned above, we can't fetch the value of any cURL options set against the provided cURL handle. Because SafeCurl handles redirects itself, it will turn off `CURLOPT_FOLLOWLOCATION` and use the value from the `Options` object. This is also true of `CURLOPT_MAXREDIRECTS`.
-
-## Demo
-
-A live demo is available at [http://safecurl.fin1te.net/#demo](http://safecurl.fin1te.net/#demo). For the site source code (if you're curious), it's hosted at [fin1te/safecurl.fin1te.net](https://github.com/fin1te/safecurl.fin1te.net).
-
-## Bounty
-
-In order to help make SafeCurl secure and ready for production use, [a Bitcoin bounty](http://safecurl.fin1te.net/#bounty) has been setup. 
-
-Inside the document root is a [Bitcoin wallet](http://safecurl.fin1te.net/btc.txt), which is only accessible by 127.0.0.1. If you can bypass the protections and grab the file, you're free to take the Bitcoins.

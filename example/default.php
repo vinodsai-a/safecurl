@@ -9,8 +9,8 @@ require '../vendor/autoload.php';
 use fin1te\SafeCurl\SafeCurl;
 
 try {
-    $curlHandle = curl_init();
-    $result = SafeCurl::execute('https://fin1te.net', $curlHandle);
+    $safeCurl = new SafeCurl(curl_init());
+    $result = $safeCurl->execute('https://fin1te.net');
 } catch (Exception $e) {
     //Handle exception
 }

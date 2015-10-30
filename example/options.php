@@ -10,8 +10,6 @@ use fin1te\SafeCurl\SafeCurl;
 use fin1te\SafeCurl\Options;
 
 try {
-    $curlHandle = curl_init();
-
     $options = new Options();
     //Completely clear the whitelist
     $options->setList('whitelist', []);
@@ -20,7 +18,8 @@ try {
     //Set the domain whitelist only
     $options->setList('whitelist', ['google.com', 'youtube.com'], 'domain');
 
-    $result = SafeCurl::execute('http://www.youtube.com', $curlHandle);
+    $safeCurl = new SafeCurl(curl_init());
+    $result = $safeCurl->execute('http://www.youtube.com');
 } catch (Exception $e) {
     //Handle exception
 }
