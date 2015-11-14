@@ -172,6 +172,10 @@ class SafeCurl
             }
         } while ($redirected);
 
+        // since we added header in the response (to retrieve the Location header), don't forget to remove all header
+        $headerSize = curl_getinfo($this->curlHandle, CURLINFO_HEADER_SIZE);
+        $response = substr($response, $headerSize);
+
         return $response;
     }
 }

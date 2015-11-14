@@ -14,6 +14,7 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($response);
         $this->assertEquals($handle, $safeCurl->getCurlHandle());
+        $this->assertNotContains('HTTP/1.1 302 Found', $response);
     }
 
     /**
