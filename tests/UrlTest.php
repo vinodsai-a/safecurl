@@ -138,7 +138,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('host', $res);
         $this->assertArrayHasKey('ips', $res);
         $this->assertArrayHasKey(0, $res['ips']);
-        $this->assertEquals('http://37.48.73.92:8080', $res['url']);
+        $this->assertEquals('http://188.166.59.23:8080', $res['url']);
         $this->assertEquals('www.fin1te.net', $res['host']);
 
         $res = Url::validateUrl('http://www.fin1te.net:8080', new Options());
