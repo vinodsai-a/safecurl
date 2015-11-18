@@ -23,7 +23,7 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
         curl_setopt($handle, CURLOPT_CUSTOMREQUEST, 'HEAD');
 
         $safeCurl = new SafeCurl($handle);
-        $response = $safeCurl->execute('https://40.media.tumblr.com/39e917383bf5fe228b82fef850251220/tumblr_nxyw8cjiYx1u7jfjwo1_500.jpg');
+        $response = $safeCurl->execute('http://40.media.tumblr.com/39e917383bf5fe228b82fef850251220/tumblr_nxyw8cjiYx1u7jfjwo1_500.jpg');
 
         $this->assertNotEmpty($response);
         $this->assertEquals($handle, $safeCurl->getCurlHandle());
