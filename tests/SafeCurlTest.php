@@ -5,12 +5,25 @@ use fin1te\SafeCurl\Options;
 
 class SafeCurlTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFunctionnal()
+    public function testFunctionnalGET()
     {
         $handle = curl_init();
 
         $safeCurl = new SafeCurl($handle);
         $response = $safeCurl->execute('http://www.google.com');
+
+        $this->assertNotEmpty($response);
+        $this->assertEquals($handle, $safeCurl->getCurlHandle());
+        $this->assertNotContains('HTTP/1.1 302 Found', $response);
+    }
+
+    public function testFunctionnalHEAD()
+    {
+        $handle = curl_init();
+        curl_setopt($handle, CURLOPT_CUSTOMREQUEST, 'HEAD');
+
+        $safeCurl = new SafeCurl($handle);
+        $response = $safeCurl->execute('https://40.media.tumblr.com/39e917383bf5fe228b82fef850251220/tumblr_nxyw8cjiYx1u7jfjwo1_500.jpg');
 
         $this->assertNotEmpty($response);
         $this->assertEquals($handle, $safeCurl->getCurlHandle());

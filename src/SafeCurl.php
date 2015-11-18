@@ -176,6 +176,11 @@ class SafeCurl
         $headerSize = curl_getinfo($this->curlHandle, CURLINFO_HEADER_SIZE);
         $response = substr($response, $headerSize);
 
+        // substr return false when string goes empty (in case of a HEAD request for example)
+        if (false === $response) {
+            return '';
+        }
+
         return $response;
     }
 }
