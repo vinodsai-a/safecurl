@@ -5,7 +5,7 @@ use fin1te\SafeCurl\Options;
 
 class SafeCurlTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFunctionnal()
+    public function testFunctionnalGET()
     {
         $handle = curl_init();
 
@@ -13,6 +13,21 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
         $response = $safeCurl->execute('http://www.google.com');
 
         $this->assertNotEmpty($response);
+        $this->assertEquals($handle, $safeCurl->getCurlHandle());
+        $this->assertNotContains('HTTP/1.1 302 Found', $response);
+    }
+
+    public function testFunctionnalHEAD()
+    {
+        $handle = curl_init();
+        // for an unknown reason, HEAD request failed: https://travis-ci.org/j0k3r/safecurl/jobs/91936743
+        // curl_setopt($handle, CURLOPT_CUSTOMREQUEST, 'HEAD');
+        curl_setopt($handle, CURLOPT_NOBODY, true);
+
+        $safeCurl = new SafeCurl($handle);
+        $response = $safeCurl->execute('http://40.media.tumblr.com/39e917383bf5fe228b82fef850251220/tumblr_nxyw8cjiYx1u7jfjwo1_100.jpg');
+
+        $this->assertEquals('', $response);
         $this->assertEquals($handle, $safeCurl->getCurlHandle());
         $this->assertNotContains('HTTP/1.1 302 Found', $response);
     }
