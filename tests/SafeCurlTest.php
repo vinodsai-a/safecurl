@@ -143,14 +143,14 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException fin1te\SafeCurl\Exception
-     * @expectedExceptionMessage cURL Error: Operation timed out after
+     * @expectedExceptionMessage cURL Error:
      */
     public function testWithCurlTimeout()
     {
         $handle = curl_init();
-        curl_setopt($handle, CURLOPT_TIMEOUT, 1);
+        curl_setopt($handle, CURLOPT_TIMEOUT_MS, 1);
 
         $safeCurl = new SafeCurl($handle);
-        $safeCurl->execute('http://hostname.fr');
+        $safeCurl->execute('https://httpstat.us/200?sleep=100');
     }
 }
