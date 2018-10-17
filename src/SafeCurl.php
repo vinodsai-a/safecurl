@@ -28,7 +28,7 @@ class SafeCurl
     {
         $this->setCurlHandle($curlHandle);
 
-        if ($options === null) {
+        if (null === $options) {
             $options = new Options();
         }
 
@@ -53,9 +53,9 @@ class SafeCurl
      */
     public function setCurlHandle($curlHandle)
     {
-        if (!is_resource($curlHandle) || get_resource_type($curlHandle) != 'curl') {
+        if (!\is_resource($curlHandle) || 'curl' !== get_resource_type($curlHandle)) {
             //Need a valid cURL resource, throw exception
-            throw new Exception('SafeCurl expects a valid cURL resource - "'.gettype($curlHandle).'" provided.');
+            throw new Exception('SafeCurl expects a valid cURL resource - "' . \gettype($curlHandle) . '" provided.');
         }
 
         $this->curlHandle = $curlHandle;
@@ -82,25 +82,6 @@ class SafeCurl
     }
 
     /**
-     * Sets up cURL ready for executing.
-     */
-    protected function init()
-    {
-        //To start with, disable FOLLOWLOCATION since we'll handle it
-        curl_setopt($this->curlHandle, CURLOPT_FOLLOWLOCATION, false);
-
-        //Always return the transfer
-        curl_setopt($this->curlHandle, CURLOPT_RETURNTRANSFER, true);
-
-        //Force IPv4, since this class isn't yet comptible with IPv6
-        $curlVersion = curl_version();
-
-        if ($curlVersion['features'] & CURLOPT_IPRESOLVE) {
-            curl_setopt($this->curlHandle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        }
-    }
-
-    /**
      * Exectutes a cURL request, whilst checking that the
      * URL abides by our whitelists/blacklists.
      *
@@ -121,7 +102,7 @@ class SafeCurl
             $headers = array('Accept: */*');
             if ($this->getOptions()->getPinDns()) {
                 //Send a Host header
-                $headers[] = 'Host: '.$url['host'];
+                $headers[] = 'Host: ' . $url['host'];
                 //The "fake" URL
                 curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
                 //We also have to disable SSL cert verfication, which is not great
@@ -140,7 +121,7 @@ class SafeCurl
 
             //Check for any errors
             if (curl_errno($this->curlHandle)) {
-                throw new Exception('cURL Error: '.curl_error($this->curlHandle));
+                throw new Exception('cURL Error: ' . curl_error($this->curlHandle));
             }
 
             //Check for an HTTP redirect
@@ -153,10 +134,10 @@ class SafeCurl
                     case 307:
                     case 308:
                         //Redirect received, so rinse and repeat
-                        if ($redirectLimit == 0 || ++$redirectCount < $redirectLimit) {
+                        if (0 === $redirectLimit || ++$redirectCount < $redirectLimit) {
                             // `CURLINFO_REDIRECT_URL` was introduced in 5.3.7 & it doesn't exist in HHVM
                             // use a custom solution is that both case
-                            if (defined('CURLINFO_REDIRECT_URL')) {
+                            if (\defined('CURLINFO_REDIRECT_URL')) {
                                 $url = curl_getinfo($this->curlHandle, CURLINFO_REDIRECT_URL);
                             } else {
                                 preg_match('/Location:(.*?)\n/i', $response, $matches);
@@ -165,7 +146,7 @@ class SafeCurl
 
                             $redirected = true;
                         } else {
-                            throw new Exception('Redirect limit "'.$redirectLimit.'" hit');
+                            throw new Exception('Redirect limit "' . $redirectLimit . '" hit');
                         }
                         break;
                     default:
@@ -184,5 +165,24 @@ class SafeCurl
         }
 
         return $response;
+    }
+
+    /**
+     * Sets up cURL ready for executing.
+     */
+    protected function init()
+    {
+        //To start with, disable FOLLOWLOCATION since we'll handle it
+        curl_setopt($this->curlHandle, CURLOPT_FOLLOWLOCATION, false);
+
+        //Always return the transfer
+        curl_setopt($this->curlHandle, CURLOPT_RETURNTRANSFER, true);
+
+        //Force IPv4, since this class isn't yet comptible with IPv6
+        $curlVersion = curl_version();
+
+        if ($curlVersion['features'] & CURLOPT_IPRESOLVE) {
+            curl_setopt($this->curlHandle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        }
     }
 }

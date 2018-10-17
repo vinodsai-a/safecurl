@@ -1,7 +1,7 @@
 <?php
 
-use fin1te\SafeCurl\Url;
 use fin1te\SafeCurl\Options;
+use fin1te\SafeCurl\Url;
 
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidURLException\InvalidSchemeException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidURLException\InvalidSchemeException
      * @expectedExceptionMessage Provided scheme "http" matches a blacklisted value
      */
     public function testValidateScheme()
@@ -42,7 +42,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidURLException\InvalidPortException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidURLException\InvalidPortException
      * @expectedExceptionMessage Provided port "8080" matches a blacklisted value
      */
     public function testValidatePort()
@@ -54,7 +54,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidURLException\InvalidDomainException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidURLException\InvalidDomainException
      * @expectedExceptionMessage Provided host "www.fin1te.net" matches a blacklisted value
      */
     public function testValidateHostBlacklist()
@@ -66,7 +66,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidURLException\InvalidDomainException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidURLException\InvalidDomainException
      * @expectedExceptionMessage Provided host "www.google.fr" doesn't match whitelisted values: (.*)\.fin1te\.net
      */
     public function testValidateHostWhitelist()
@@ -78,7 +78,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidURLException\InvalidDomainException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidURLException\InvalidDomainException
      * @expectedExceptionMessage Provided host "www.youpi.boom" doesn't resolve to an IP address
      */
     public function testValidateHostWithnoip()
@@ -89,7 +89,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidURLException\InvalidIPException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidURLException\InvalidIPException
      * @expectedExceptionMessage Provided host "2.2.2.2" resolves to "2.2.2.2", which doesn't match whitelisted values: 1.1.1.1
      */
     public function testValidateHostWithWhitelistIp()
@@ -115,7 +115,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidURLException\InvalidIPException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidURLException\InvalidIPException
      * @expectedExceptionMessage Provided host "1.1.1.1" resolves to "1.1.1.1", which matches a blacklisted value: 1.1.1.1
      */
     public function testValidateHostWithBlacklistIp()

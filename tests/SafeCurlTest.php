@@ -1,7 +1,7 @@
 <?php
 
-use fin1te\SafeCurl\SafeCurl;
 use fin1te\SafeCurl\Options;
+use fin1te\SafeCurl\SafeCurl;
 
 class SafeCurlTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception
+     * @expectedException \fin1te\SafeCurl\Exception
      * @expectedExceptionMessage SafeCurl expects a valid cURL resource - "NULL" provided.
      */
     public function testBadCurlHandler()
@@ -103,7 +103,7 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception
+     * @expectedException \fin1te\SafeCurl\Exception
      * @expectedExceptionMessage Redirect limit "1" hit
      */
     public function testWithFollowLocationLimit()
@@ -128,7 +128,7 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidURLException\InvalidPortException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidURLException\InvalidPortException
      * @expectedExceptionMessage Provided port "123" doesn't match whitelisted values: 80, 443, 8080
      */
     public function testWithFollowLocationLeadingToABlockedUrl()
@@ -137,12 +137,12 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
         $options->enableFollowLocation();
 
         $safeCurl = new SafeCurl(curl_init(), $options);
-        // this bit.ly redirect to `http://0.0.0.0:123`
-        $safeCurl->execute('http://bit.ly/1L9Ttv0');
+        // this short link redirect to `http://0.0.0.0:123`
+        $safeCurl->execute('http://shorturl.at/eksHM');
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception
+     * @expectedException \fin1te\SafeCurl\Exception
      * @expectedExceptionMessage cURL Error:
      */
     public function testWithCurlTimeout()

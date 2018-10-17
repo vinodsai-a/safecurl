@@ -44,7 +44,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataForFollowlocationLimit
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided limit
      */
     public function testFollowlocationLimitException($limit)
@@ -102,7 +102,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
      */
     public function testInListBadList()
@@ -111,7 +111,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
      */
     public function testInListBadType()
@@ -194,7 +194,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
      */
     public function testGetListBadList()
@@ -203,7 +203,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
      */
     public function testGetListBadType()
@@ -223,7 +223,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
      */
     public function testSetListBadList()
@@ -232,7 +232,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided values must be an array, "integer" given
      */
     public function testSetListBadValue()
@@ -241,7 +241,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
      */
     public function testSetListBadType()
@@ -250,7 +250,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
      */
     public function testSetListBadTypeValue()
@@ -259,7 +259,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
      */
     public function testAddToListBadList()
@@ -268,7 +268,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
      */
     public function testAddToListBadType()
@@ -277,7 +277,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided values cannot be empty
      */
     public function testAddToListBadValue()
@@ -286,7 +286,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
      */
     public function testRemoveFromListBadList()
@@ -295,7 +295,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
      */
     public function testRemoveFromListBadType()
@@ -304,7 +304,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException fin1te\SafeCurl\Exception\InvalidOptionException
+     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
      * @expectedExceptionMessage Provided values cannot be empty
      */
     public function testRemoveFromListBadValue()
