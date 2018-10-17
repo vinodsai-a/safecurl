@@ -50,6 +50,7 @@ before_script:
 
 script:
     - ./vendor/bin/phpunit --coverage-clover=coverage.clover
+    - if [ "$CS_FIXER" = "run" ]; then composer require friendsofphp/php-cs-fixer "~2.0" ; fi;
     - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/php-cs-fixer fix --verbose --dry-run ; fi;
 
 after_script:
