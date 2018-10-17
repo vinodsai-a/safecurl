@@ -101,7 +101,7 @@ class SafeCurl
 
             if ($this->getOptions()->getPinDns()) {
                 //Send a Host header
-                curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, array('Host: '.$url['host']));
+                curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, array('Host: ' . $url['host']));
                 //The "fake" URL
                 curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
                 //We also have to disable SSL cert verfication, which is not great
