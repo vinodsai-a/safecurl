@@ -6,8 +6,8 @@
  */
 require '../vendor/autoload.php';
 
-use fin1te\SafeCurl\SafeCurl;
 use fin1te\SafeCurl\Options;
+use fin1te\SafeCurl\SafeCurl;
 
 try {
     $options = new Options();
