@@ -137,8 +137,7 @@ class SafeCurlTest extends \PHPUnit_Framework_TestCase
         $options->enableFollowLocation();
 
         $safeCurl = new SafeCurl(curl_init(), $options);
-        // this short link redirect to `http://0.0.0.0:123`
-        $safeCurl->execute('https://shorturl.at/eksHM');
+        $safeCurl->execute('http://httpbin.org/redirect-to?url=http://0.0.0.0:123');
     }
 
     /**
