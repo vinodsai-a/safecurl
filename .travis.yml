@@ -20,6 +20,8 @@ matrix:
         - php: 5.4
           dist: precise
           sudo: required
+        - php: 7.2
+          env: CS_FIXER=run
     fast_finish: true
     allow_failures:
         - php: nightly
@@ -48,7 +50,7 @@ before_script:
 
 script:
     - ./vendor/bin/phpunit --coverage-clover=coverage.clover
-    - ./vendor/bin/php-cs-fixer fix --verbose --dry-run
+    - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/php-cs-fixer fix --verbose --dry-run ; fi;
 
 after_script:
     - |
