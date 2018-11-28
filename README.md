@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/j0k3r/safecurl.svg?branch=master)](https://travis-ci.org/j0k3r/safecurl)
 [![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/safecurl/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/j0k3r/safecurl/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/safecurl/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/j0k3r/safecurl/?branch=master)
+[![Total Downloads](https://poser.pugx.org/j0k3r/safecurl/downloads)](https://packagist.org/packages/j0k3r/safecurl)
+[![License](https://poser.pugx.org/j0k3r/safecurl/license)](https://packagist.org/packages/j0k3r/safecurl)
 
 SafeCurl intends to be a drop-in replacement for the [curl_exec](http://php.net/manual/en/function.curl-exec.php) function in PHP. SafeCurl validates each part of the URL against a white or black list, to help protect against Server-Side Request Forgery attacks.
 
@@ -20,7 +22,7 @@ SafeCurl can be included in any PHP project using [Composer](https://getcomposer
 
 ```
 "require": {
-    "fin1te\safecurl": "~1"
+    "j0k3r\safecurl": "~2.0"
 }
 ```
 
