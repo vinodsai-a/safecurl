@@ -3,23 +3,12 @@ os: linux
 language: php
 
 php:
-    - 5.5
-    - 5.6
-    - 7.0
-    - 7.1
-    - 7.2
     - 7.3
     - 7.4
     - nightly
 
 jobs:
     include:
-        - php: 5.3.3
-          dist: precise
-        - php: 5.3
-          dist: precise
-        - php: 5.4
-          dist: precise
         - php: 7.2
           env: CS_FIXER=run
     fast_finish: true
@@ -32,21 +21,14 @@ cache:
         - vendor
         - $HOME/.composer/cache
 
-before_install:
-    # disable TLS for composer because openssl is disabled for PHP 5.3.3 on travis
-    # see: https://blog.travis-ci.com/upcoming_ubuntu_11_10_migration/
-    - if [[ $TRAVIS_PHP_VERSION = 5.3.3 ]]; then composer config -g -- disable-tls true; fi;
-    - if [[ $TRAVIS_PHP_VERSION = 5.3.3 ]]; then composer config -g -- secure-http false; fi;
-
 install:
     - composer self-update
 
 before_script:
-    - composer install --prefer-dist --no-interaction
+    - composer install --prefer-dist --no-interaction -o
 
 script:
-    - ./vendor/bin/phpunit --coverage-clover=coverage.clover
-    - if [ "$CS_FIXER" = "run" ]; then composer require friendsofphp/php-cs-fixer "~2.0" ; fi;
+    - php vendor/bin/simple-phpunit -v --coverage-clover=coverage.clover
     - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/php-cs-fixer fix --verbose --dry-run ; fi;
 
 after_script:
