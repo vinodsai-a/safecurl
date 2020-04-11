@@ -2,11 +2,11 @@
 
 use fin1te\SafeCurl\Options;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends \PHPUnit\Framework\TestCase
 {
     private $options;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->options = new Options();
     }
@@ -44,11 +44,12 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataForFollowlocationLimit
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided limit
      */
     public function testFollowlocationLimitException($limit)
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided limit');
+
         $this->options->setFollowLocationLimit($limit);
     }
 
@@ -101,21 +102,19 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->options->isInList('whitelist', 'domain', 'www.fin1te.net'));
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
     public function testInListBadList()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->isInList('noo', 'domain', '');
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
     public function testInListBadType()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->isInList('whitelist', 'noo', '');
     }
 
@@ -193,21 +192,19 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('ftp', $list[0]);
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
     public function testGetListBadList()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->getList('noo');
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
     public function testGetListBadType()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->getList('whitelist', 'noo');
     }
 
@@ -222,93 +219,83 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(22), $this->options->getList('blacklist', 'port'));
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
     public function testSetListBadList()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->setList('noo', array());
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided values must be an array, "integer" given
-     */
     public function testSetListBadValue()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided values must be an array, "integer" given');
+
         $this->options->setList('whitelist', 12);
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
     public function testSetListBadType()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->setList('whitelist', array(), 'noo');
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
     public function testSetListBadTypeValue()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->setList('whitelist', array('noo' => 'oops'));
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
     public function testAddToListBadList()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->addToList('noo', 'noo', 'noo');
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
     public function testAddToListBadType()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->addToList('whitelist', 'noo', 'noo');
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided values cannot be empty
-     */
     public function testAddToListBadValue()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided values cannot be empty');
+
         $this->options->addToList('whitelist', 'ip', null);
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided list "noo" must be "whitelist" or "blacklist"
-     */
     public function testRemoveFromListBadList()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided list "noo" must be "whitelist" or "blacklist"');
+
         $this->options->removeFromList('noo', 'noo', 'noo');
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided type "noo" must be "ip", "port", "domain" or "scheme"
-     */
     public function testRemoveFromListBadType()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided type "noo" must be "ip", "port", "domain" or "scheme"');
+
         $this->options->removeFromList('whitelist', 'noo', 'noo');
     }
 
-    /**
-     * @expectedException \fin1te\SafeCurl\Exception\InvalidOptionException
-     * @expectedExceptionMessage Provided values cannot be empty
-     */
     public function testRemoveFromListBadValue()
     {
+        $this->expectException(\fin1te\SafeCurl\Exception\InvalidOptionException::class);
+        $this->expectExceptionMessage('Provided values cannot be empty');
+
         $this->options->removeFromList('whitelist', 'ip', null);
     }
 

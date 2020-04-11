@@ -22,7 +22,7 @@ SafeCurl can be included in any PHP project using [Composer](https://getcomposer
 
 ```
 "require": {
-    "j0k3r\safecurl": "~2.0"
+    "j0k3r\safecurl": "~3.0"
 }
 ```
 

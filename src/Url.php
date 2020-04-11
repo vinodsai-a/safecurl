@@ -31,17 +31,17 @@ class Url
             throw new InvalidURLException('Error parsing URL "' . $url . '"');
         }
 
-        if (!array_key_exists('host', $parts)) {
+        if (!\array_key_exists('host', $parts)) {
             throw new InvalidURLException('Provided URL "' . $url . '" doesn\'t contain a hostname');
         }
 
         //If credentials are passed in, but we don't want them, raise an exception
-        if (!$options->getSendCredentials() && (array_key_exists('user', $parts) || array_key_exists('pass', $parts))) {
+        if (!$options->getSendCredentials() && (\array_key_exists('user', $parts) || \array_key_exists('pass', $parts))) {
             throw new InvalidURLException('Credentials passed in but "sendCredentials" is set to false');
         }
 
         //First, validate the scheme
-        if (array_key_exists('scheme', $parts)) {
+        if (\array_key_exists('scheme', $parts)) {
             $parts['scheme'] = self::validateScheme($parts['scheme'], $options);
         } else {
             //Default to http
@@ -49,7 +49,7 @@ class Url
         }
 
         //Validate the port
-        if (array_key_exists('port', $parts)) {
+        if (\array_key_exists('port', $parts)) {
             $parts['port'] = self::validatePort($parts['port'], $options);
         }
 
