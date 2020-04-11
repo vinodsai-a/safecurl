@@ -214,7 +214,7 @@ class Options
             throw new InvalidOptionException('Provided list "' . $list . '" must be "whitelist" or "blacklist"');
         }
 
-        if (!array_key_exists($type, $this->$list)) {
+        if (!\array_key_exists($type, $this->$list)) {
             throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
         }
 
@@ -257,7 +257,7 @@ class Options
         }
 
         if (null !== $type) {
-            if (!array_key_exists($type, $this->$list)) {
+            if (!\array_key_exists($type, $this->$list)) {
                 throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
             }
 
@@ -287,7 +287,7 @@ class Options
         }
 
         if (null !== $type) {
-            if (!array_key_exists($type, $this->$list)) {
+            if (!\array_key_exists($type, $this->$list)) {
                 throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
             }
 
@@ -322,7 +322,7 @@ class Options
             throw new InvalidOptionException('Provided list "' . $list . '" must be "whitelist" or "blacklist"');
         }
 
-        if (!array_key_exists($type, $this->$list)) {
+        if (!\array_key_exists($type, $this->$list)) {
             throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
         }
 
@@ -359,7 +359,7 @@ class Options
             throw new InvalidOptionException('Provided list "' . $list . '" must be "whitelist" or "blacklist"');
         }
 
-        if (!array_key_exists($type, $this->$list)) {
+        if (!\array_key_exists($type, $this->$list)) {
             throw new InvalidOptionException('Provided type "' . $type . '" must be "ip", "port", "domain" or "scheme"');
         }
 
