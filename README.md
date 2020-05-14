@@ -22,7 +22,7 @@ SafeCurl can be included in any PHP project using [Composer](https://getcomposer
 
 ```
 "require": {
-    "j0k3r\safecurl": "~3.0"
+    "vinodsai-a\safecurl": "~3.0"
 }
 ```
 
@@ -90,6 +90,12 @@ $options->enableFollowLocation();
 
 //Abort after 10 redirects
 $options->setFollowLocationLimit(10);
+```
+
+For including Headers in response
+```php
+$options = new Options();
+$options->setIsHeadersIncludedInResponse(true);
 ```
 
 #### URL Checking

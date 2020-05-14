@@ -6,6 +6,10 @@
     "license": "MIT",
     "authors": [
         {
+            "name": "Vinod Sai",
+            "email": "a.vinodsai@gmail.com"
+        },
+        {
             "name": "Jeremy Benoist",
             "email": "jeremy.benoist@gmail.com"
         },

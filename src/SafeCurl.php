@@ -153,10 +153,11 @@ class SafeCurl
             }
         } while ($redirected);
 
-        // since we added header in the response (to retrieve the Location header), don't forget to remove all header
-        $headerSize = curl_getinfo($this->curlHandle, CURLINFO_HEADER_SIZE);
-        $response = substr($response, $headerSize);
-
+        if (!$this->options->getIsHeadersIncludedInResponse()) {
+            // since we added header in the response (to retrieve the Location header), don't forget to remove all header
+            $headerSize = curl_getinfo($this->curlHandle, CURLINFO_HEADER_SIZE);
+            $response = substr($response, $headerSize);
+        }
         // substr return false when string goes empty (in case of a HEAD request or when reponse body is empty for example)
         if (false === $response) {
             return '';

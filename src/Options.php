@@ -26,6 +26,12 @@ class Options
      */
     private $pinDns = false;
 
+
+    /**
+     * @var bool Allow headers in Reponse
+     */
+    private $isHeadersIncludedInResponse = false;
+
     /**
      * @var array
      */
@@ -196,6 +202,28 @@ class Options
     {
         $this->pinDns = false;
 
+        return $this;
+    }
+
+    /**
+     * Get is headers included in response option.
+     *
+     * @return bool
+     */
+    public function getIsHeadersIncludedInResponse()
+    {
+        return $this->isHeadersIncludedInResponse;
+    }
+
+    /**
+     * Set if headers included in the response.
+     *
+     * @return Options
+     */
+    public function setIsHeadersIncludedInResponse($isHeadersIncludedInResponse)
+    {
+        $this->isHeadersIncludedInResponse = $isHeadersIncludedInResponse;
+        
         return $this;
     }
 
