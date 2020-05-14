@@ -1,5 +1,5 @@
 {
-    "name": "j0k3r/safecurl",
+    "name": "vinodsai-a/safecurl",
     "description": "A drop-in replacement for 'curl_exec', designed to prevent SSRF attacks.",
     "type": "library",
     "keywords": ["curl", "safecurl", "safe", "ssrf", "websec"],
