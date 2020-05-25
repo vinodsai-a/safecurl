@@ -89,7 +89,7 @@ class SafeCurl
      *
      * @return bool
      */
-    public function execute($url)
+    public function execute($url, $headers = array())
     {
         $redirected = false;
         $redirectCount = 0;
@@ -100,8 +100,10 @@ class SafeCurl
             $url = Url::validateUrl($url, $this->getOptions());
 
             if ($this->getOptions()->getPinDns()) {
+                $headers["Host"] = $url['host'];
+                array_push($headers, 'Host: ' . $url['host']);
                 //Send a Host header
-                curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, array('Host: ' . $url['host']));
+                curl_setopt($this->curlHandle, CURLOPT_HTTPHEADER, $headers);
                 //The "fake" URL
                 curl_setopt($this->curlHandle, CURLOPT_URL, $url['url']);
                 //We also have to disable SSL cert verfication, which is not great

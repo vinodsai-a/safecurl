@@ -126,6 +126,14 @@ The first is to prevent [DNS Rebinding](https://en.wikipedia.org/wiki/DNS_rebind
 $options = new Options();
 $options->enablePinDns();
 ```
+For PinDns - execute takes two arguments, url and headers.
+```php
+$options = new Options();
+$options->enablePinDns();
+
+$safeCurl = new SafeCurl($curlHandle, $options);
+$response = $safeCurl->execute($url, $headers);
+```
 
 The second disables the use of credentials in a URL, since PHP's `parse_url` returns values which differ from ones cURL uses. This is a temporary fix.
 
